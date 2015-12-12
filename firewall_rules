@@ -1,0 +1,25 @@
+###
+### For the kitchenPC, use LAN DNS
+###
+iptables -t nat -A PREROUTING -p udp -i br0 -s 192.168.1.222/25 --dport 53 -j DNAT --to $(nvram get lan_ipaddr)
+iptables -t nat -A PREROUTING -p tcp -i br0 -s 192.168.1.222/25 --dport 53 -j DNAT --to $(nvram get lan_ipaddr)
+###
+### For all others, use WAN DNS
+###
+iptables -t nat -I POSTROUTING -o `get_wanface` -j SNAT --to `nvram get wan_ipaddr`
+###
+### access WAN & other stuff 
+###
+iptables -I FORWARD -i br1 -m state --state NEW -j ACCEPT
+###
+### keep br1 from accessing br0 and br0 from accessing br1 
+###
+iptables -I FORWARD -i br1 -o br0 -m state --state NEW -j DROP
+iptables -I FORWARD -i br0 -o br1 -m state --state NEW -j DROP
+###
+### keep guest net from hosting common services
+###
+iptables -I INPUT -i br1 -p tcp --dport telnet -j REJECT --reject-with tcp-reset
+iptables -I INPUT -i br1 -p tcp --dport ssh -j REJECT --reject-with tcp-reset
+iptables -I INPUT -i br1 -p tcp --dport www -j REJECT --reject-with tcp-reset
+iptables -I INPUT -i br1 -p tcp --dport https -j REJECT --reject-with tcp-reset
