@@ -1,0 +1,17 @@
+Forwards
+Application
+Protocol	    Source  Net Port from	IP Address	Port to	Enable
+
+ssh           2222    192.168.1.200   22
+synology      5001    192.168.1.200   5001
+synology      5006    192.168.1.200   5006
+ntop          3000    192.168.1.200   3000
+plex          32400   192.168.1.230   32400
+ds photo      8888    192.168.1.200   8888
+nagios-ssl    4433    192.168.1.127   443
+plex ssh      2223    192.168.1.230   22
+plex-redirec  32480   192.168.1.230   32480
+plex-ssl      4443    192.168.1.230   4443
+nagios-ssh    22127   192.168.1.127   22
+nagios-http   12780   192.168.1.127   80
+sftp          2221    192.168.1.200   2222
